@@ -19,7 +19,7 @@
 
         <button id="generateBtn" type="button">Gerar cortes</button>
 
-        <div id="statusMessage" class="status">Aguardando arquivo...</div>
+        <div id="statusMessage" class="status">Aguardando arquivo... Para testar localmente, rode o servidor Python e abra esta página direto do seu computador.</div>
         <div id="result" class="result"></div>
       </section>
     </main>
@@ -60,7 +60,7 @@
           }
         } catch (error) {
           console.error(error);
-          status.innerText = 'Erro de conexão. O servidor Python está rodando?';
+          status.innerText = 'Erro de conexão. Verifique se o servidor Python está rodando em http://127.0.0.1:8000.';
           status.style.color = '#e74c3c';
         }
       }
