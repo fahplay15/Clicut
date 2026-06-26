@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gerador de Cortes IA</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="container">
+      <section class="card">
+        <h1>Gerador de Cortes IA</h1>
+        <p>Envie um vídeo ou áudio e receba sugestões de trechos curtos para repostar.</p>
+
+        <label class="upload-box" for="videoFile">
+          <span>Selecionar arquivo</span>
+          <input id="videoFile" type="file" accept="audio/*,video/*" />
+        </label>
+
+        <button id="generateBtn" type="button">Gerar cortes</button>
+
+        <div id="statusMessage" class="status">Aguardando arquivo...</div>
+        <div id="result" class="result"></div>
+      </section>
+    </main>
+
+    <script>
+      async function processarVideo() {
+        const fileInput = document.getElementById('videoFile');
+        const status = document.getElementById('statusMessage');
+        const result = document.getElementById('result');
+
+        if (fileInput.files.length === 0) {
+          status.innerText = 'Por favor, selecione um vídeo primeiro!';
+          status.style.color = '#e74c3c';
+          return;
+        }
+
+        status.innerText = 'Enviando vídeo para o servidor... A IA já vai analisar!';
+        status.style.color = '#f39c12';
+        result.innerHTML = '';
+
+        const formData = new FormData();
+        formData.append('file', fileInput.files[0]);
+
+        try {
+          const response = await fetch('http://127.0.0.1:8000/processar-video', {
+            method: 'POST',
+            body: formData,
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            status.innerText = 'Corte gerado com sucesso! Arquivo salvo como: ' + data.arquivo;
+            status.style.color = '#27ae60';
+          } else {
+            const errorData = await response.json().catch(() => ({}));
+            status.innerText = errorData.detail || 'Erro ao processar o vídeo no servidor.';
+            status.style.color = '#e74c3c';
+          }
+        } catch (error) {
+          console.error(error);
+          status.innerText = 'Erro de conexão. O servidor Python está rodando?';
+          status.style.color = '#e74c3c';
+        }
+      }
+
+      document.getElementById('generateBtn').addEventListener('click', processarVideo);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,17 @@
+# Ignorar o ambiente virtual do Python
+venv/
+__pycache__/
+*.pyc
+
+# Ignorar vídeos temporários e arquivos de mídia pesados
+*.mp4
+*.m4v
+*.avi
+*.srt
+temp_*/
+
+# Ignorar arquivos de configuração com chaves de API
+.env
+
+# Arquivos temporários gerados durante testes
+temp_test.bin
